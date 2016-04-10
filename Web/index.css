@@ -14,6 +14,7 @@ div {
 .percentage {
 	font-size: 200px;
 	font-family: "Times New Roman";
+  text-align: center;
 }
 .time {
 	font-size: 50px;
