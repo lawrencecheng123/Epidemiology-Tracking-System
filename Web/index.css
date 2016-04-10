@@ -13,6 +13,8 @@ div {
 
 .block {
   display:inline-block;
+  height:100%;
+  padding-left: 100px;
 }
 
 .percentage {
@@ -20,6 +22,8 @@ div {
 	font-size: 200px;
 	font-family: "Times New Roman";
   text-align: center;
+  padding-right:100px;
+  padding-left: 100px;
 }
 .time {
 	font-size: 50px;
