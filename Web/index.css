@@ -11,7 +11,12 @@ div {
     color: #E5E5E5;
 }
 
+.block {
+  display:inline-block;
+}
+
 .percentage {
+  display:inline-block;
 	font-size: 200px;
 	font-family: "Times New Roman";
   text-align: center;

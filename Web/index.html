@@ -24,12 +24,12 @@
 </head>
 <body ng-app="app">
   <div layout="row">
-    <div flex-gt-sm="25" flex="50">
+    <div flex-gt-sm="25" flex="50" class="block">
       <div layout="column" layout-align="center center">
         List 1
       </div>
     </div>
-    <div flex-gt-sm="50" flex="100" >
+    <div flex-gt-sm="50" flex="100" class="block" >
       <div  layout="column" layout-align="center center">
         <div class="percentage">
           100 %
@@ -46,11 +46,18 @@
         </div>
       </div>
     </div>
-    <div flex-gt-sm="25" flex="50">
+    <div flex-gt-sm="20" flex="40" class="block">
       <div layout="column" layout-align="center center">
         <div ng-controller="suggestionController">
           <div ng-repeat="todo in todos">
-            <p>{{todo.text}}</p>
+            <div class="panel panel-default">
+            <div class="panel-body">
+              <button type="button" class="btn btn-default pull-left">Done</button>
+                <p> {{todo.text}} </p>
+  
+                <div class="clearfix"></div>
+            </div>
+            </div>
           </div>
         </div>
 
