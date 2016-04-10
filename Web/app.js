@@ -5,5 +5,7 @@ app.controller('suggestionController', function($scope) {
       {text:"todo1"},
       {text:"todo2"},
       {text:"todo3"}
-    ]
+    ];
+
+    
   });
