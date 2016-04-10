@@ -10,11 +10,20 @@ div {
     background-color: #2C2C2C;
     color: #E5E5E5;
 }
-
+#todos {
+  background-color: #2C2C2C;
+    color: #E5E5E5;
+    border: transparent;
+}
 .block {
   display:inline-block;
   height:100%;
-  padding-left: 100px;
+  width:18%;
+}
+.block2 {
+  display:inline-block;
+  height:100%;
+  width:60%;
 }
 
 .percentage {
