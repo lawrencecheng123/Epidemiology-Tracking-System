@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="en-US" >
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Angular Material style sheet -->
@@ -16,8 +16,9 @@
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   <script src="countdown.js"></script>
+  <script src="suggestions.js"></script>
 </head>
-<body ng-app="BlankApp" ng-cloak>
+<body ng-app="MoriApp" ng-cloak>
   <div layout="row">
     <div flex-gt-sm="25" flex="50">
       <div  layout="column" layout-align="center center">
@@ -43,7 +44,12 @@
     </div>
     <div flex-gt-sm="25" flex="50">
       <div  layout="column" layout-align="center center">
-        List 2
+        <div ng-controller="suggestionController">
+        <div ng-repeat="todo in todos">
+          <p>{{todo.text}}</p>
+        </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -63,7 +69,7 @@
     /**
      * You must include the dependency on 'ngMaterial' 
      */
-     angular.module('BlankApp', ['ngMaterial']);
+     angular.module('MoriApp', ['ngMaterial']);
      </script>
 
    </body>
