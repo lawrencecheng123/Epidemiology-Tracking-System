@@ -20,30 +20,6 @@ function initMap() {
   });
   var latlng = {lat: e.latLng.lat(), lng: e.latLng.lng()};
 
-   /*geocoder.geocode({'location': latlng}, function(results, status) {
-          if (status === google.maps.GeocoderStatus.OK) {
-            if (results[1]) {
-               firebaseref.push({
-                title: "Hello World!",
-                author: "Firebase",
-                location: {
-                  city: "San Francisco",
-                  state: "California",
-                  zip: 94103, lat: e.latLng.lat(), lng: e.latLng.lng()
-                }
-                });
-
-              //infowindow.setContent(results[1].formatted_address);
-              //infowindow.open(map, marker);
-              }
-             else {
-              window.alert('No results found');
-            }
-          } else {
-            window.alert('Geocoder failed due to: ' + status);
-          }
-        });*/
-
   firebaseref.push({
   title: "Hello World!",
   author: "Firebase",

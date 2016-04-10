@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Epidemiology Tracking</title>
+    <title>Lawrence's Map</title>
     <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
     <style>
       html, body {
@@ -83,7 +83,7 @@
     <p>Click on the map to add markers.</p>
 
     <div id="floating-panel2">
-      <input onclick="newInfectionArea();" type=button value="Set New Infectious Area">
+      <input onclick="newInfectionAreaChange();" type=button value="Set New Infectious Area">
     </div>
 
      <div id="floating-panel3">
@@ -105,6 +105,7 @@
       var markers = [];
       var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       var labelIndex = 0;
+      var newInfectionZoneCheck = 0;
 
       function initMap() {
         var haightAshbury = {lat: 37.769, lng: -122.446};
@@ -122,6 +123,8 @@
 
         // Adds a marker at the center of the map.
         //addMarker(haightAshbury);
+
+        
       }
 
       // Adds a marker to the map and push to the array.
@@ -141,7 +144,14 @@
         marker.addListener('click', function(){infowindow.open(map,marker);
         });
         markers.push(marker);
+        if(newInfectionZoneCheck==0) //if the set new Area button has not been pressed
+        {
         distance(); //gives the notification everytime you put down a marker
+        }
+        if(newInfectionZoneCheck==1)
+        {
+          newInfectionArea();
+        }
         //firebaseAdd();
       }
 
@@ -184,14 +194,14 @@
       var risk = 0;
       function infectionLevel1()
       {
-         risk = 3;
+         risk = 6;
          //alert("test 1" + risk);
          alert("R0 is the Basic Reproductive Number, which measures the infectivity of diseases. For instance, Ebola (one of the least infectious) has an R0 of 1.5-2.5, while Measles (one of the most infectious) has an R0 of 12-18");
       }
 
       function infectionLevel2()
       {
-         risk = 10;
+         risk = 9;
          //alert("test 2" + risk);
          alert("R0 is the Basic Reproductive Number, which measures the infectivity of diseases. For instance, Ebola (one of the least infectious) has an R0 of 1.5-2.5, while Measles (one of the most infectious) has an R0 of 12-18");
       }
@@ -203,9 +213,9 @@
          alert("R0 is the Basic Reproductive Number, which measures the infectivity of diseases. For instance, Ebola (one of the least infectious) has an R0 of 1.5-2.5, while Measles (one of the most infectious) has an R0 of 12-18");
       }
 
-
       var dangerCount = 0; //number of points in the danger zone, a certain distance from an initial marker
       var dist = []; //holds the distances from the initial point for the markers added 
+      var lastVal = 0;
 
       //Make it so you don't have to press the button everytime for it to register!
       function distance() {
@@ -227,7 +237,6 @@
           var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
           var d = R * c;
 
-          //var degrees = getDegrees(p1.lat, p1.lng, p2.lat, p2.lng);
           
           if (d<5000) //if the distance is within 5000m from the initial point
           {
@@ -237,85 +246,82 @@
           dist.push(d);
           //return d and put it into the array; // returns the distance in meter
          //alert("Test");
-         //google.maps.geometry.spherical.computeDistanceBetween (latLng1, latLn000g2)
+         //google.maps.geometry.spherical.computeDistanceBetween (latLng1, latLng2)
 
           //alert(dist[i-1]);
           //alert(dangerCount);
         //}
-
         var baseline = 2500; //Average number of people within a 5000 radius circle in an area in the U.S.
 
-        if (dangerCount%5==0) //each marker represents ten infected people
+        if (dangerCount==5 || dangerCount==10 ||dangerCount==15) //each marker represents ten infected people
         {
           //infectionLevel()
           var numInfected = (risk*(dangerCount*10))+(dangerCount*10);
           var infectionChance = numInfected/baseline;
           var percent = infectionChance*100;
           alert("Chance of being infected in this area: " + percent + "%");
-          
+          alert("danger count 1:" + dangerCount);
         }
-
-
-
-       
-        
-       /*var form = document.getElementById('form');
-        number = document.getElementById('number');
-        form.onsubmit = function() {
-        var variable = number.value;
-      
-
-        /if (dangerCount==5) //Each marker is 10 people infected
-        {
-          var numInfected = (variable*dangerCount)+dangerCount;
+       /*if(dangerCount==10) {
+          var numInfected = (risk*(dangerCount*10))+(dangerCount*10);
           var infectionChance = numInfected/baseline;
-          alert("Chance of being infected in this area: " + infectionChance);
-        }
-       if(dangerCount==10) {
-          var numInfected = (variable*dangerCount)+dangerCount;
-          var infectionChance = numInfected/baseline;
-          alert("Chance of being infected in this area: " + infectionChance)
-          }
-        }
-        */
+          var percent = infectionChance*100;
+          alert("Chance of being infected in this area: " + percent + "%");
+          alert("danger count 1:" + dangerCount);
+        }*/
+        lastVal = i;
       }
 
+      function newInfectionAreaChange()
+      {
+        newInfectionZoneCheck = 1;
+      }
       
-      //var dist = [];
+      var dist2 = [];
+      dangerCount2 = 0;
 
       function newInfectionArea()
       {
+          var i = markers.length-1;//Use the distance from the last array added to the first
+          var p1 = {lat:markers[lastVal].getPosition().lat(),lng: markers[0].getPosition().lng()};
+          var p2 = {lat:markers[i].getPosition().lat(),lng: markers[i].getPosition().lng()};
+          var R = 6378137; // Earth’s mean radius in meter
+          var dLat = (p2.lat - p1.lat)*(Math.PI / 180);
+          var dLong =(p2.lng - p1.lng)*(Math.PI / 180);
+          //var a = Math.sin(dLat/2)*Math.sin(dLat / 2)+Math.cos((p1.lat*(Math.PI / 180)));
+          var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos((p1.lat*(Math.PI / 180))) * Math.cos((p2.lat*(Math.PI / 180))) *
+            Math.sin(dLong / 2) * Math.sin(dLong / 2);
+          var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          var d = R * c;
+
           
+          if (d<5000) //if the distance is within 5000m from the initial point
+          {
+            dangerCount2++;
+          }
+
+          dist2.push(d);
+
+           if (dangerCount2==5) //each marker represents ten infected people
+        {
+          //infectionLevel()
+          var numInfected = (risk*(dangerCount2*10))+(dangerCount2*10);
+          var infectionChance = numInfected/baseline;
+          var percent = infectionChance*100;
+          alert("Chance of being infected in this area: " + percent + "%");
+          alert("danger count 2:" + dangerCount2);
+          
+        }
+       if(dangerCount2==10) {
+          var numInfected = (risk*(dangerCount2*10))+(dangerCount2*10);
+          var infectionChance = numInfected/baseline;
+          var percent = infectionChance*100;
+          alert("Chance of being infected in this area: " + percent + "%");
+          alert("danger count 2" + dangerCount2);
+        }
 
       }
-
-     
-
-      /*function infectionLevel()
-      {
-        var form = document.getElementById('form');
-        number = document.getElementById('number');
-        form.onsubmit = function() {
-        var variable = number.value;
-        alert("R0 is the Basic Reproductive Number, which measures the infectivity of diseases. For instance, Ebola (one of the least infectious) has an R0 of 1.5-2.5, while Measles (one of the most infectious) has an R0 of 12-18");
-        if (variable<2.5)
-        {
-          alert("Low risk of infection");
-        }
-        else if (variable<8)
-        {
-          alert("Mild risk of infection");
-        }
-        else if (variable<12)
-        {
-          alert("High risk of infection");
-        }
-        else
-        {
-          alert("Extremely high risk of infection");
-        }*/
-  //};
-      //}
 
       function clearDatabase()
       {
@@ -332,33 +338,24 @@
           marker.setAnimation(google.maps.Animation.BOUNCE);
         }
       }
-
-
-/*function initMap() {
-  var map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 0, lng: 0},
-    zoom: 3,
-    styles: [{
-      featureType: 'poi',
-      stylers: [{ visibility: 'off' }]  // Turn off points of interest.
-    }, {
-      featureType: 'transit.station',
-      stylers: [{ visibility: 'off' }]  // Turn off bus stations, train stations, etc.
-    }],
-    disableDoubleClickZoom: true
-  });
-
-  map.addListener('click', function(e) {
-  var marker = new google.maps.Marker({
-    position: {lat: e.latLng.lat(), lng: e.latLng.lng()},
-    map: map
-  });
-  var latlng = {lat: e.latLng.lat(), lng: e.latLng.lng()};
-  */
   
-  
-  var firebaseref = new Firebase("https://lawrencechengproject.firebaseio.com/");
+  /*var firebaseref = new Firebase("https://lawrencechengproject.firebaseio.com/");
   var i = 0;  
+
+  map.addListener('click', function(e)) {
+    firebaseref.push({
+  title: "Hello World!",
+  author: "Firebase",
+  location: {
+    city: "San Francisco",
+    state: "California",
+    zip: 94103, lat: 200, lng: 200
+  }
+  firebaseref.on("child_added", function(snapshot, prevChildKey) {
+  // Get latitude and longitude from Firebase.
+  var newPosition = snapshot.val();
+  }
+}*/
 
   /*function firebaseAdd
   { 
@@ -396,6 +393,6 @@
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDR7JmSdVZs4iRvBiCboaR33UbriQp2QgA&callback=initMap">
     </script>
-    <!--<script src="map.js"> </script>-->
+    <script src="map2.js"> </script>
   </body>
 </html>

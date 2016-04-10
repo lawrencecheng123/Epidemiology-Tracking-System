@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Epidemiology Tracking</title>
+    <title>Epidemiology Tracking v5</title>
     <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
     <style>
       html, body {
@@ -14,8 +14,9 @@
       }
       #floating-panel {
         position: absolute;
-        top: 20px;
-        left: 25%;
+        top: 115px;
+        /*left: 25%;*/
+        float:left;
         z-index: 5;
         background-color: #fff;
         padding: 5px;
@@ -28,8 +29,9 @@
 
       #floating-panel2 {
         position: absolute;
-        top: 80px;
-        left: 20%;
+        top: 160px;
+        /*left: 20%;*/
+        float:right;
         z-index: 5;
         background-color: #fff;
         padding: 5px;
@@ -42,8 +44,9 @@
 
        #floating-panel3 {
         position: absolute;
-        top: 80px;
-        left: 45%;
+        top: 205px;
+        /*left: 45%;*/
+        float:right;
         z-index: 5;
         background-color: #fff;
         padding: 5px;
@@ -58,6 +61,22 @@
         position: absolute;
         top: 20px;
         left: 70%;
+        float:right;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+
+      #floating-panel5 {
+        position: absolute;
+        top: 40px;
+        /*left: 75%;*/
+        float:left;
         z-index: 5;
         background-color: #fff;
         padding: 5px;
@@ -95,6 +114,10 @@
     <input onclick="infectionLevel2();" type=button value="R0-Level of infectivity(7-12)">
     <input onclick="infectionLevel3();" type=button value="R0-Level of infectivity(13-18)">
   </div> 
+
+  <div id="floating-panel5">
+    <p>Epidemiology Tracker</p>
+  </div>
 
   <script>
 
@@ -203,9 +226,9 @@
          alert("R0 is the Basic Reproductive Number, which measures the infectivity of diseases. For instance, Ebola (one of the least infectious) has an R0 of 1.5-2.5, while Measles (one of the most infectious) has an R0 of 12-18");
       }
 
-
       var dangerCount = 0; //number of points in the danger zone, a certain distance from an initial marker
       var dist = []; //holds the distances from the initial point for the markers added 
+      var bearCoor = []; //Holds the bearing coordinates for the disease points
 
       //Make it so you don't have to press the button everytime for it to register!
       function distance() {
@@ -227,7 +250,6 @@
           var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
           var d = R * c;
 
-          //var degrees = getDegrees(p1.lat, p1.lng, p2.lat, p2.lng);
           
           if (d<5000) //if the distance is within 5000m from the initial point
           {
@@ -237,11 +259,15 @@
           dist.push(d);
           //return d and put it into the array; // returns the distance in meter
          //alert("Test");
-         //google.maps.geometry.spherical.computeDistanceBetween (latLng1, latLn000g2)
+         //google.maps.geometry.spherical.computeDistanceBetween (latLng1, latLng2)
 
-          //alert(dist[i-1]);
-          //alert(dangerCount);
-        //}
+        //var degrees = getDegrees(p1.lat, p1.lng, p2.lat, p2.lng);
+        //getDegrees(20, 50, 70, 90);
+        //alert(degrees);
+
+        //var bearing = getBearing(p1.lat, p1.lng, p2.lat, p2.lng);
+        bearCoor[i] = getBearing(p1.lat, p1.lng, p2.lat, p2.lng);
+
 
         var baseline = 2500; //Average number of people within a 5000 radius circle in an area in the U.S.
 
@@ -251,35 +277,45 @@
           var numInfected = (risk*(dangerCount*10))+(dangerCount*10);
           var infectionChance = numInfected/baseline;
           var percent = infectionChance*100;
-          alert("Chance of being infected in this area: " + percent + "%");
+          var sum = 0;
+          for( var i = 0; i < bearCoor.length; i++ ){
+              sum += bearCoor[i]; //don't forget to add the base
+          }
+          var avgBearing = (sum/bearCoor.length)+20;
+          /*alert("Chance of being infected in this area: " + percent + "%" + "Trend Direction:" + degrees);*/
+           alert("Chance of being infected in this area: " + percent + "%  \n" + "Trend Direction (Bearing): " + avgBearing + " degrees");
           
         }
-
-
-
-       
-        
-       /*var form = document.getElementById('form');
-        number = document.getElementById('number');
-        form.onsubmit = function() {
-        var variable = number.value;
       
-
-        /if (dangerCount==5) //Each marker is 10 people infected
-        {
-          var numInfected = (variable*dangerCount)+dangerCount;
-          var infectionChance = numInfected/baseline;
-          alert("Chance of being infected in this area: " + infectionChance);
-        }
-       if(dangerCount==10) {
-          var numInfected = (variable*dangerCount)+dangerCount;
-          var infectionChance = numInfected/baseline;
-          alert("Chance of being infected in this area: " + infectionChance)
-          }
-        }
-        */
       }
 
+  
+function radians(n) {
+  return n * (Math.PI / 180);
+}
+function degrees(n) {
+  return n * (180 / Math.PI);
+}
+
+//Gets the direction that the disease is moving in as a compass bearing
+function getBearing(startLat,startLong,endLat,endLong){
+  startLat = radians(startLat);
+  startLong = radians(startLong);
+  endLat = radians(endLat);
+  endLong = radians(endLong);
+
+  var dLong = endLong - startLong;
+
+  var dPhi = Math.log(Math.tan(endLat/2.0+Math.PI/4.0)/Math.tan(startLat/2.0+Math.PI/4.0));
+  if (Math.abs(dLong) > Math.PI){
+    if (dLong > 0.0)
+       dLong = -(2.0 * Math.PI - dLong);
+    else
+       dLong = (2.0 * Math.PI + dLong);
+  }
+
+  return (degrees(Math.atan2(dLong, dPhi)) + 360.0) % 360.0;
+}
       
       //var dist = [];
 
@@ -289,31 +325,6 @@
 
       }
 
-     
-
-      /*function infectionLevel()
-      {
-        var form = document.getElementById('form');
-        number = document.getElementById('number');
-        form.onsubmit = function() {
-        var variable = number.value;
-        alert("R0 is the Basic Reproductive Number, which measures the infectivity of diseases. For instance, Ebola (one of the least infectious) has an R0 of 1.5-2.5, while Measles (one of the most infectious) has an R0 of 12-18");
-        if (variable<2.5)
-        {
-          alert("Low risk of infection");
-        }
-        else if (variable<8)
-        {
-          alert("Mild risk of infection");
-        }
-        else if (variable<12)
-        {
-          alert("High risk of infection");
-        }
-        else
-        {
-          alert("Extremely high risk of infection");
-        }*/
   //};
       //}
 
@@ -333,29 +344,6 @@
         }
       }
 
-
-/*function initMap() {
-  var map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 0, lng: 0},
-    zoom: 3,
-    styles: [{
-      featureType: 'poi',
-      stylers: [{ visibility: 'off' }]  // Turn off points of interest.
-    }, {
-      featureType: 'transit.station',
-      stylers: [{ visibility: 'off' }]  // Turn off bus stations, train stations, etc.
-    }],
-    disableDoubleClickZoom: true
-  });
-
-  map.addListener('click', function(e) {
-  var marker = new google.maps.Marker({
-    position: {lat: e.latLng.lat(), lng: e.latLng.lng()},
-    map: map
-  });
-  var latlng = {lat: e.latLng.lat(), lng: e.latLng.lng()};
-  */
-  
   
   var firebaseref = new Firebase("https://lawrencechengproject.firebaseio.com/");
   var i = 0;  
