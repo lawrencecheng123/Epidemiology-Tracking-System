@@ -15,10 +15,12 @@
 
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
   <script src="countdown.js"></script>
-  <script src="suggestions.js"></script>
+  <script src="app.js"></script>
 </head>
-<body ng-app="MoriApp" ng-cloak>
+<body ng-app="app">
   <div layout="row">
     <div flex-gt-sm="25" flex="50">
       <div  layout="column" layout-align="center center">
@@ -45,9 +47,9 @@
     <div flex-gt-sm="25" flex="50">
       <div  layout="column" layout-align="center center">
         <div ng-controller="suggestionController">
-        <div ng-repeat="todo in todos">
-          <p>{{todo.text}}</p>
-        </div>
+          <div ng-repeat="todo in todos">
+            <p>{{todo.text}}</p>
+          </div>
         </div>
 
       </div>
