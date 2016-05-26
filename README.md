@@ -4,3 +4,5 @@
    The application was created using HTML, CSS, Javascript/Angular JS, and the Google Maps API. The Firebase API was also employed as a database for storing the recorded map points for further analysis.
    
    Contributors: Lawrence Cheng, Blair Chen, Sean Meng, Sinclair Chen
+
+   Website: http://blairc.com/disease/
