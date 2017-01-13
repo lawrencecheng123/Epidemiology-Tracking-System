@@ -5,4 +5,4 @@
    
    Contributors: Lawrence Cheng, Blair Chen, Sean Meng, Sinclair Chen
 
-   Website: http://blairc.com/disease/
+   Website: http://blairc.com/disease.html
