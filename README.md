@@ -6,3 +6,6 @@
    Contributors: Lawrence Cheng, Blair Chen, Sean Meng, Sinclair Chen
 
    Website: http://blairc.com/disease.html
+   
+   ![alt text](https://github.com/lawrencecheng123/Epidemiology-Tracking-System/blob/master/Updated%20Epidemiology%20Tracker.png "Epidemiology Tracker")
+   
