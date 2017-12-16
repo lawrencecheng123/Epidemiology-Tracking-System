@@ -4,8 +4,6 @@
    The application was created using HTML, CSS, Javascript/Angular JS, and the Google Maps API. The Firebase API was also employed as a database for storing the recorded map points for further analysis.
    
    Contributors: Lawrence Cheng, Blair Chen, Sean Meng, Sinclair Chen
-
-   Website: http://blairc.com/disease.html
    
    ![alt text](https://github.com/lawrencecheng123/Epidemiology-Tracking-System/blob/master/Updated%20Epidemiology%20Tracker.png "Epidemiology Tracker")
    
